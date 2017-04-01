@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>greenDao源码解析一 | Alamusi&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="注解解析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="greenDao源码解析一">
+<meta property="og:url" content="https://alamusitl.github.io/2017/03/31/greenDao源码解析一/index.html">
+<meta property="og:site_name" content="Alamusi's blog">
+<meta property="og:description" content="注解解析">
+<meta property="og:updated_time" content="2017-04-01T08:29:28.474Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="greenDao源码解析一">
+<meta name="twitter:description" content="注解解析">
+  
+    <link rel="alternate" href="/atom.xml" title="Alamusi&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Alamusi&#39;s blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Just for fun</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://alamusitl.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-greenDao源码解析一" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/31/greenDao源码解析一/" class="article-date">
+  <time datetime="2017-03-31T10:03:06.000Z" itemprop="datePublished">2017-03-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      greenDao源码解析一
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="注解解析"><a href="#注解解析" class="headerlink" title="注解解析"></a>注解解析</h3><a id="more"></a>
+<p>[TOC]</p>
+<hr>
+<h4 id="1-ensp-Entity"><a href="#1-ensp-Entity" class="headerlink" title="1.&ensp;Entity"></a>1.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/Entity.java" target="_blank" rel="external">Entity</a></h4><p>&emsp;实体类注解，greenDao只持久化使用Entity标记的实体类<br>&emsp;示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@Entity(</div><div class="line">        nameInDb = &quot;Note&quot;,// 指定DB表名;默认使用实体类的类名大写</div><div class="line">        indexes = &#123;&#125;,// 定义索引，可跨越多个列,创建单列索引使用Index</div><div class="line">        createInDb = true,// 标志位设置在DB是否创建表，为false时不创建;当多个实体类关联这个表时多余的实体类里面设置false，避免重复创建;默认true</div><div class="line">        schema = &quot;default&quot;,// 指定实体类的schema，如果项目中有多个schema时表明这个dao属于哪个schema;默认为default</div><div class="line">        active = false,// 表明是否支持实体类之间的update/delete/refresh方法，当实体类定义ToMany或ToOne关系时依赖于这个值;默认false</div><div class="line">        generateConstructors = true,// 是否所有的构造函数都生成，无参构造是必须的;默认true</div><div class="line">        generateGettersSetters = true,// 所有的getter和setter方法都生成;默认true</div><div class="line">        protobuf = void.class// 定义一个Protobuf类为此实体类</div><div class="line">)</div><div class="line">public class Note &#123;// 实体类</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h4 id="2-ensp-Generated"><a href="#2-ensp-Generated" class="headerlink" title="2.&ensp;Generated"></a>2.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/Generated.java" target="_blank" rel="external">Generated</a></h4><p>&emsp;标记字段，构造函数或者是函数是由greenDao生成，当实体类改变时所有的generated标记的代码都会重新生成。如果不想改变的时候使用Keep标记<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line">    @Generated(hash = 586692638)</div><div class="line">    public Note() &#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="3-ensp-Keep"><a href="#3-ensp-Keep" class="headerlink" title="3.&ensp;Keep"></a>3.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/Keep.java" target="_blank" rel="external">Keep</a></h4><p>&emsp;指定标记目标在下次greenDao生成的时候保持现状。如果在实体类使用这个注解会禁止任何修改。<br>这个注解在不确定的时候尽量不要用。<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line">    @Keep</div><div class="line">    public User() &#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="4-ensp-Id"><a href="#4-ensp-Id" class="headerlink" title="4.&ensp;Id"></a>4.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/Id.java" target="_blank" rel="external">Id</a></h4><p>&emsp;标记这个字段是表中的主键<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line">    @Id(autoincrement = true)// id是否自动增长(id类型只有Long/long时生效),默认为false</div><div class="line">    private long id;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="5-ensp-Index"><a href="#5-ensp-Index" class="headerlink" title="5.&ensp;Index"></a>5.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/Index.java" target="_blank" rel="external">Index</a></h4><p>&emsp;标记该属性是索引或者是在Entity#indexs()中使用定义多列多列索引<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line">    @Index(</div><div class="line">        value = &quot;&quot;, // 标记多个属性创建索引，以逗号分隔。使用ASC或者DESC指定顺序。应该只在Entity#indexes()中使用</div><div class="line">        name = &quot;&quot;, // 索引别名，如果缺省，greenDao 会使用基于属性列名的名字</div><div class="line">        unique = false// 是否基于这个索引创建唯一的约束，默认false</div><div class="line">    )</div><div class="line">    private long id;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="6-ensp-NotNull"><a href="#6-ensp-NotNull" class="headerlink" title="6.&ensp;NotNull"></a>6.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/NotNull.java" target="_blank" rel="external">NotNull</a></h4><p>&emsp;标记这个字段不能为空<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line">    @NotNull</div><div class="line">    private String text;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="7-ensp-Unique"><a href="#7-ensp-Unique" class="headerlink" title="7.&ensp;Unique"></a>7.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/Unique.java" target="_blank" rel="external">Unique</a></h4><p>&emsp;标记这个属性在创建表的时候有唯一的约束,当有@Unique和@Index时不必要并且DB层性能会下降<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line">    @Unique</div><div class="line">    private String text;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="8-ensp-Transient"><a href="#8-ensp-Transient" class="headerlink" title="8.&ensp;Transient"></a>8.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/Transient.java" target="_blank" rel="external">Transient</a></h4><p>&emsp;标记这个字段不会创建到表中<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line">    @Transient</div><div class="line">    private String transient;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="9-ensp-Property"><a href="#9-ensp-Property" class="headerlink" title="9.&ensp;Property"></a>9.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/Property.java" target="_blank" rel="external">Property</a></h4><p>&emsp;设置属性在表中的列名<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line">    @Property(nameInDb = &quot;&quot;)// 指定该属性在database中列的的名字，默认为属性名</div><div class="line">    private String data;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="10-ensp-OrderBy"><a href="#10-ensp-OrderBy" class="headerlink" title="10.&ensp;OrderBy"></a>10.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/OrderBy.java" target="_blank" rel="external">OrderBy</a></h4><p>&emsp;用于排序，有AES和DESC,默认为AES；如果值是缺省的，使用主键排序<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line">    @OrderBy(value = &quot;DESC&quot;)</div><div class="line">    private String content;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="11-ensp-ToOne"><a href="#11-ensp-ToOne" class="headerlink" title="11.&ensp;ToOne"></a>11.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/ToOne.java" target="_blank" rel="external">ToOne</a></h4><p>&emsp;创建一对一的关联，将自己的一个属性与另一个表建立关联<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line"></div><div class="line">    private long userId;// 使用这个创建与另一个实体类的关联</div><div class="line">    </div><div class="line">    @ToOne(joinProperty = &quot;userId&quot;)</div><div class="line">    private User user;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Entity</div><div class="line">public class User &#123;</div><div class="line">    @Id</div><div class="line">    private long id;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="12-ensp-ToMany"><a href="#12-ensp-ToMany" class="headerlink" title="12.&ensp;ToMany"></a>12.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/ToMany.java" target="_blank" rel="external">ToMany</a></h4><p>&emsp;定义多对多的关联。</p>
+<h5 id="emsp-1-一对多-外键约束"><a href="#emsp-1-一对多-外键约束" class="headerlink" title="&emsp;1. 一对多 外键约束"></a>&emsp;1. 一对多 外键约束</h5><p>&emsp;&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line">    @Id </div><div class="line">    private Long id;</div><div class="line"></div><div class="line">    @ToMany(referencedJoinProperty = &quot;userId&quot;)// 目标实体类中的属性名，没有JoinEntity或JoinProperty时生效,属性类型必须为List</div><div class="line">    private List&lt;User&gt; users;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Entity</div><div class="line">public class User &#123;</div><div class="line">    @Id </div><div class="line">    private Long id;</div><div class="line">    private long userId;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="emsp-2-一对多-关联约束"><a href="#emsp-2-一对多-关联约束" class="headerlink" title="&emsp;2. 一对多 关联约束"></a>&emsp;2. 一对多 关联约束</h5><p>&emsp;&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line">    @Id</div><div class="line">    private long id;</div><div class="line">    @Unique</div><div class="line">    private String noteTag;</div><div class="line">    </div><div class="line">    // 当前实体类中的属性与目标实体类中的属性匹配的数组</div><div class="line">    // 没有referencedJoinProperty或JoinEntity时生效</div><div class="line">    @ToMany(joinProperties = &#123;</div><div class="line">            @JoinProperty(name = &quot;noteTag&quot;, referencedName = &quot;tag&quot;)</div><div class="line">    &#125;)</div><div class="line">    private List&lt;User&gt; users;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Entity</div><div class="line">public class User &#123;</div><div class="line">    @Id</div><div class="line">    private long id;</div><div class="line">    @NotNull</div><div class="line">    private String tag;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="emsp-3-多对多"><a href="#emsp-3-多对多" class="headerlink" title="&emsp;3. 多对多"></a>&emsp;3. 多对多</h5><p>&emsp;&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line"></div><div class="line">    @ToMany</div><div class="line">    @JoinEntity(</div><div class="line">            entity = JoinNotesWithUsers.class,// 加入的实体类的引用，持有源与目标属性</div><div class="line">            sourceProperty = &quot;userId&quot;,// 持有源实体类的id</div><div class="line">            targetProperty = &quot;noteId&quot;// 持有目标实体类的id</div><div class="line">    )</div><div class="line">    private List&lt;User&gt; users;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Entity</div><div class="line">public class User &#123;</div><div class="line">    @Id</div><div class="line">    private long id;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Entity</div><div class="line">public class JoinNotesWithUsers &#123;</div><div class="line">    @Id</div><div class="line">    private long id;</div><div class="line">    private long userId;</div><div class="line">    private long noteId;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="13-ensp-JoinEntity"><a href="#13-ensp-JoinEntity" class="headerlink" title="13.&ensp;JoinEntity"></a>13.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/JoinEntity.java" target="_blank" rel="external">JoinEntity</a></h4><p>&emsp;通过加入表定义多对多的关系,通过与ToMany配套使用<br>&emsp;示例:请参考ToMany 3</p>
+<hr>
+<h4 id="14-ensp-JoinProperty"><a href="#14-ensp-JoinProperty" class="headerlink" title="14.&ensp;JoinProperty"></a>14.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/JoinProperty.java" target="_blank" rel="external">JoinProperty</a></h4><p>&emsp;定义名称跟引用名之间的关系,与ToMany配套使用<br>&emsp;示例:请参考ToMany 2</p>
+<hr>
+<h4 id="15-ensp-Convert"><a href="#15-ensp-Convert" class="headerlink" title="15.&ensp;Convert"></a>15.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/Convert.java" target="_blank" rel="external">Convert</a></h4><p>&emsp;对属性指定PropertyConverter，支持自定义类型<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line"></div><div class="line">    // converter指定转换操作的类，columeType指定在数据在表中的类型</div><div class="line">    @Convert(converter = NoteTypeConverter.class, columnType = String.class)</div><div class="line">    private NoteType type;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public enum NoteType &#123;</div><div class="line">    TEXT, LIST, PICTURE</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class NoteTypeConverter implements PropertyConverter&lt;NoteType, String&gt; &#123;</div><div class="line">    @Override</div><div class="line">    public NoteType convertToEntityProperty(String databaseValue) &#123;</div><div class="line">        return NoteType.valueOf(databaseValue);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String convertToDatabaseValue(NoteType entityProperty) &#123;</div><div class="line">        return entityProperty.name();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="16-ensp-PropertyConverter"><a href="#16-ensp-PropertyConverter" class="headerlink" title="16.&ensp;PropertyConverter"></a>16.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/converter/PropertyConverter.java" target="_blank" rel="external">PropertyConverter</a></h4><p>&emsp;这是接口，Not注解。使用它可以自定义属性类型，不局限于原始数据类型，保证灵活性<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 接口有两个泛型参数，P为自定义实体类，D为表中的数据类型</div><div class="line">public interface PropertyConverter&lt;P, D&gt; &#123;</div><div class="line">    P convertToEntityProperty(D databaseValue);</div><div class="line"></div><div class="line">    D convertToDatabaseValue(P entityProperty);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="17-ensp-Beta"><a href="#17-ensp-Beta" class="headerlink" title="17.&ensp;Beta"></a>17.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/apihint/Beta.java" target="_blank" rel="external">Beta</a></h4><p>&emsp;使用这个注解的APIs表明在未来的某个版本会被改变或被删除，但是现在仍可以使用<br>&emsp;示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Beta</div><div class="line">@Entity</div><div class="line">public class Note &#123;</div><div class="line"></div><div class="line">    @Beta</div><div class="line">    @Id</div><div class="line">    private long id;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="18-ensp-Experimental"><a href="#18-ensp-Experimental" class="headerlink" title="18.&ensp;Experimental"></a>18.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/apihint/Experimental.java" target="_blank" rel="external">Experimental</a></h4><p>&emsp;同@Beta</p>
+<hr>
+<h4 id="19-ensp-Internal"><a href="#19-ensp-Internal" class="headerlink" title="19.&ensp;Internal"></a>19.&ensp;<a href="https://github.com/greenrobot/greenDAO/blob/master/greendao-api/src/main/java/org/greenrobot/greendao/annotation/apihint/Internal.java" target="_blank" rel="external">Internal</a></h4><p>&emsp;使用这个注解的APIs不可使用，只能被greenDao使用并且未来的版本可能会改变</p>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://alamusitl.github.io/2017/03/31/greenDao源码解析一/" data-id="cj0xo39vu0003wcej4l7p6h27" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenDao/">greenDao</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/03/24/first-mind/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">第一篇文章</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenDao/">greenDao</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文章/">文章</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/03/31/greenDao源码解析一/">greenDao源码解析一</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/24/first-mind/">第一篇文章</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/24/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">简介</h3>
+    <div class="widget">
+		<ul class="entry">
+			<li>本体：阿拉木斯</li>
+			<li>外文：owl</li>
+			<li>现状：全职</li>
+			<li>职位：Android开发工程师/li>
+			<li>QQ  ：670558817</li>
+			<li>邮箱：alamusi0120@gmail.com</li>
+		</ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+		<ul class="entry">
+			<li><a href="https://alamusitl.github.io/" title="Alamusi's Blog">个人Blog</a></li>
+		</ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Alamusi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
